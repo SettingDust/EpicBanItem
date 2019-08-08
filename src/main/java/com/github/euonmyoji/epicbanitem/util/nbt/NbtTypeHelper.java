@@ -190,53 +190,6 @@ final class NbtTypeHelper {
         return null;
     }
 
-    static String toString(Object value) {
-        if (value instanceof Boolean) {
-            return (Boolean) value ? "1b" : "0b";
-        }
-        if (value instanceof Byte) {
-            return value.toString() + "b";
-        }
-        if (value instanceof Short) {
-            return value.toString() + "s";
-        }
-        if (value instanceof Integer) {
-            return value.toString();
-        }
-        if (value instanceof Long) {
-            return value.toString() + "l";
-        }
-        if (value instanceof Float) {
-            return value.toString() + "f";
-        }
-        if (value instanceof Double) {
-            return value.toString() + "d";
-        }
-        if (value instanceof String) {
-            return "\"" + value.toString()
-                    .replace("\\", "\\\\")
-                    .replace("\"", "\\\"")
-                    .replace("\u00a7", "\\u00a7") + "\"";
-
-        }
-        byte[] bytes = getAsByteArray(value);
-        if (Objects.nonNull(bytes)) {
-            IntStream range = IntStream.range(0, bytes.length);
-            return "[B;" + range.mapToObj(i -> bytes[i] + "b").reduce((a, b) -> a + ", " + b).orElse("") + "]";
-        }
-        int[] ints = getAsIntegerArray(value);
-        if (Objects.nonNull(ints)) {
-            IntStream range = IntStream.range(0, ints.length);
-            return "[I;" + range.mapToObj(i -> ints[i] + "").reduce((a, b) -> a + ", " + b).orElse("") + "]";
-        }
-        long[] longs = getAsLongArray(value);
-        if (Objects.nonNull(longs)) {
-            IntStream range = IntStream.range(0, longs.length);
-            return "[L;" + range.mapToObj(i -> longs[i] + "l").reduce((a, b) -> a + ", " + b).orElse("") + "]";
-        }
-        throw new IllegalArgumentException("The value is a list or a compound");
-    }
-
     static OptionalInt compare(@Nullable Object value, ConfigurationNode node) {
         if (Objects.nonNull(value)) {
             Object another = convert(value, node);
