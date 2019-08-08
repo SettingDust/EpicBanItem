@@ -1,8 +1,9 @@
 package com.github.euonmyoji.epicbanitem.util;
 
 import com.github.euonmyoji.epicbanitem.EpicBanItem;
-import com.github.euonmyoji.epicbanitem.util.nbt.NbtTagRenderer;
+import com.github.euonmyoji.epicbanitem.util.nbt.NbtTagRenderVisitor;
 import com.github.euonmyoji.epicbanitem.util.nbt.QueryResult;
+import com.github.euonmyoji.epicbanitem.util.nbt.visitor.SpongeDataContainerReader;
 import com.google.gson.stream.JsonWriter;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -100,11 +101,23 @@ public class TextUtil {
     }
 
     public static Text serializeNbtToString(DataView nbt, QueryResult result) {
-        return new NbtTagRenderer(result).render(nbt);
+        Text.Builder textBuilder = Text.builder();
+
+        SpongeDataContainerReader dataContainerReader = new SpongeDataContainerReader(nbt);
+        NbtTagRenderVisitor visitor = new NbtTagRenderVisitor(textBuilder, result);
+        dataContainerReader.accept(visitor);
+
+        return textBuilder.build();
     }
 
     public static Text serializeNbtToString(DataView nbt) {
-        return NbtTagRenderer.EMPTY_RENDERER.render(nbt);
+        Text.Builder textBuilder = Text.builder();
+
+        SpongeDataContainerReader dataContainerReader = new SpongeDataContainerReader(nbt);
+        NbtTagRenderVisitor visitor = new NbtTagRenderVisitor(textBuilder);
+        dataContainerReader.accept(visitor);
+
+        return textBuilder.build();
     }
 /*
   TODO: use this when sponge forge do not relocate 'com.typesafe.config' to 'configurate.typesafe.config'
