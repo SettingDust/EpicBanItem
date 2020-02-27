@@ -44,7 +44,9 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only: master
+              only:
+                - master
+                - develop
       - deploy:
           requires:
             - build
