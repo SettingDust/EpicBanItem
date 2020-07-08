@@ -11,14 +11,12 @@ plugins {
 def pluginVersion = {
     def command = "git describe --abbrev=0 --tags"
     def version = command.execute().text.trim()
-    println(version)
     return version.length() > 0 ? version.substring(1) : ""
 }
 
 def buildNumber = {
     def command = "git rev-list --count --first-parent HEAD"
     def version = command.execute().text.trim()
-    println(version)
     return version.length() > 0 ? version.toInteger() - 1 : ""
 }
 
