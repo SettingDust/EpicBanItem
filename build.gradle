@@ -10,12 +10,12 @@ plugins {
 
 def pluginVersion = {
     def command = "git describe --abbrev=0 --tags"
-    def verison = command.execute().text.trim()
-    return verison.length > 0 ? verison.substring(1) : ""
+    return command.execute().text.trim().substring(1)
 }
 
 def buildNumber = {
     def command = "git rev-list --count --first-parent HEAD"
+    println command.execute().text.trim()
     return command.execute().text.trim().toInteger() - 1
 }
 
@@ -66,8 +66,9 @@ blossom {
 }
 
 signing {
-    sign jar, shadowJar
-    required = System.hasProperty("signing.password")
+    sign jar, shadowJar each {
+        it.enabled project.findProperty("signing.password") as boolean
+    }
 }
 
 tasks.withType(JavaCompile) {
