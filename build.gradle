@@ -17,7 +17,7 @@ def pluginVersion = {
 
 def buildNumber = {
     def command = "git rev-list --count --first-parent HEAD"
-    println command.execute().text.trim()
+    println(command.execute().text.trim())
     return command.execute().text.trim().toInteger() - 1
 }
 
