@@ -10,7 +10,8 @@ plugins {
 
 def pluginVersion = {
     def command = "git describe --abbrev=0 --tags"
-    return command.execute().text.trim().substring(1)
+    def verison = command.execute().text.trim()
+    return verison.length > 0 ? verison.substring(1) : ""
 }
 
 def buildNumber = {
